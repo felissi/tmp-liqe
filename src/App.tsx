@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { parse ,type LiqeQuery} from "liqe"
+import { parse } from "liqe"
 
 function App() {
   const [query, setQuery] = useState("")

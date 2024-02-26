@@ -169,12 +169,12 @@ test("email:/[^.:@\\s](?:[^:@\\s]*[^.:@\\s])?@[^.@\\s]+(?:\\.[^.@\\s]+)*/", () =
 
 test('phoneNumber:"404-050-2611"', () =>
   testQuery('phoneNumber:"404-050-2611"', ["noah"]));
-test("phoneNumber:404", () => testQuery("phoneNumber:404", ["noah"]));
+test("phoneNumber:404", () => testQuery("phoneNumber:404", []));
+test("phoneNumber:'404'", () => testQuery("phoneNumber:'404'", ["noah"]));
 
 test("balance:364", () => testQuery("balance:364", ["noah"]));
-test("balance:abc364", () => testQuery("balance:abc364", ["noah"]));
-test('balance:"abc 364 a2d2"', () =>
-  testQuery('balance:"abc 364 a2d2"', ["noah"]));
+test("balance:'364'", () => testQuery("balance:'364'", ["noah"]));
+test("balance:/364/", () => testQuery("balance:/364/", ["noah"]));
 
 test("(David)", () => testQuery("(David)", ["david"]));
 test("(name:david OR name:john)", () =>

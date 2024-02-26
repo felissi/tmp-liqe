@@ -3,7 +3,6 @@ import * as P from "fp-ts/Predicate";
 import * as A from "fp-ts/Array";
 import { pipe } from "fp-ts/function";
 import get from "lodash/get";
-import { Range } from "liqe/dist/src/types";
 import { _rangePredicate } from "./range";
 import { _comparisonRangePredicate } from "./comparison";
 
@@ -142,15 +141,17 @@ export const termToPredicateAtom = (ast: LiqeQuery) => {
     /**
      * Date are comparable
      */
-    if (typeof expressionValue !== "number") {
-      throw new TypeError(`Debug ${operator}  ${expressionValue}`);
-      throw new TypeError("Expected a number.");
-    }
+    // if (typeof expressionValue !== "number") {
+    //   throw new TypeError(
+    //     `Debug ${JSON.stringify(
+    //       operator
+    //     )}  ${expressionValue} ${typeof expressionValue}`
+    //   );
+    //   throw new TypeError("Expected a number.");
+    // }
 
     return (x: number) =>
-      typeof x !== "number"
-        ? false
-        : _comparisonRangePredicate(expressionValue, x, operator.operator);
+      _comparisonRangePredicate(expressionValue, x, operator.operator);
   } else if (typeof expressionValue === "boolean") {
     return (x: unknown) => !!x === expressionValue;
   } else if (expressionValue === null) {
@@ -178,14 +179,6 @@ export const termToPredicate = <T>(ast: LiqeQuery): P.Predicate<T> => {
     throw new Error("Expected a tag expression.");
   }
 
-  if (ast.field.type === "ImplicitField") {
-    // throw new Error("Not implemented");
-    return pipe(
-      termToPredicateAtom(ast),
-      P.contramap((_) => get(_, "name"))
-    );
-  }
-
   /** Other fields */
   // ast.field.name;
   // ast.operator.operator;
@@ -206,31 +199,19 @@ export const termToPredicate = <T>(ast: LiqeQuery): P.Predicate<T> => {
     return fieldName;
   };
 
-  const fieldName = pipe(
-    ast.field.name, //
-    filterFieldName,
-    transformFieldName
-  );
+  const fieldName =
+    ast.field.type === "ImplicitField"
+      ? "name"
+      : pipe(
+          ast.field.name, //
+          filterFieldName,
+          transformFieldName
+        );
 
   return pipe(
     termToPredicateAtom(ast),
     P.contramap((_) => get(_, fieldName))
   );
-  // if (ast.expression.type === "LiteralExpression") {
-  //   return pipe(
-  //     _toStringPredicate(ast),
-  //     P.contramap((_) => _[ast.field.name])
-  //   );
-  // }
-  // if (ast.expression.type === "RangeExpression") {
-  //   return;
-  // }
-  // if (ast.expression.type === "RegexExpression") {
-  //   return pipe(
-  //     _toStringPredicate(ast),
-  //     P.contramap((_) => _[ast.field.name])
-  //   );
-  // }
 };
 
 function getImplicitPredicate<A>(left: P.Predicate<A>, right: P.Predicate<A>) {

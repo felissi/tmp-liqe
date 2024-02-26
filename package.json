@@ -2,7 +2,6 @@
   "name": "vite-project",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -11,6 +10,7 @@
   },
   "dependencies": {
     "ava": "^6.1.1",
+    "dayjs": "^1.11.10",
     "fp-ts": "^2.16.2",
     "liqe": "^3.8.0",
     "lodash": "^4.17.21",
