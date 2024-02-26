@@ -150,7 +150,7 @@ export const termToPredicateAtom = (ast: LiqeQuery) => {
     //   throw new TypeError("Expected a number.");
     // }
 
-    return (x: number) =>
+    return (x: unknown) =>
       _comparisonRangePredicate(expressionValue, x, operator.operator);
   } else if (typeof expressionValue === "boolean") {
     return (x: unknown) => !!x === expressionValue;
